@@ -28,3 +28,4 @@ go run ./cmd/app
 ```
 
 
+![Coverage](https://codecov.io/gh/alexEnsimag/firefly/branch/main/graph/badge.svg)
