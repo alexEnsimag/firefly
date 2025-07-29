@@ -1,57 +1,81 @@
-### 🚀 Running the App
+![Coverage](https://img.shields.io/badge/coverage-70%25-brightgreen)
 
-#### Compile and run locally (CLI mode)
-- Requirements: go 1.24+ 
-- How to run: clone the project then `go build ./cmd/essayanalyzer`, then `./essayanalyzer`
-- For help: `./essayanalyzer -h`
+## EssayAnalyzer
 
-#### Use the docker image (use default parameters)
+A simple and efficient tool to cound predefined words in essays with configurable parameters and Docker support.
 
-- Requirements: docker
-- How to run:  `docker run ghcr.io/alexensimag/firefly:latest`
+### 🚀 How to run
+
+#### Compile and Run Locally (CLI Mode)
+
+Requirements: Go 1.24 or higher
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/alexEnsimag/firefly.git
+   cd firefly
+   ```
+2. Build the application:
+   ```bash
+   go build ./cmd/essayanalyzer
+   ```
+3. Run the binary:
+   ```bash
+   ./essayanalyzer
+   ./essayanalyzer -h # for help prompt
+   ```
+
+#### Run Using Docker (Default Parameters)
+
+Requirements: Docker installed and running
+
+Run:
+```bash
+docker run ghcr.io/alexensimag/firefly:latest
+```
+
+### Configurations
+
+You can configure the following parameters (defaults shown):
+
+- minimum word size: `3`
+- number of top words returned: `10`
+- number of workers: `20`
+- task buffer size: `200`
 
 ### Considerations
 
-#### Configurable parameters
-- minimum word size (default: `3`)
-- number of top words returned (default: `10`)
-- number of workers (default: `20`)
-- number of tasks loaded in the "task buffer": (default: `200`)
+- The application is cancellable with `Ctrl+C`. Note that ongoing work will be lost on interruption.
 
+- The application uses a custom HTTP client that handles retries and rate limit
+    - rate limit is set too `100` requests per second, no burst allowed
+    - automatically retries on network errors and HTTP 429 and 5XX 
+    - max 5 retries, with exponentiall backoff between 1-5 seconds
 
-#### Normalization algorithm
-Additionally to the requirements, when evaluated words are normalized as such:
-- words are lowercased
-- punctuations at the beginning and end of words are removed (besides `'` at end of word)
-- examples:
-    - `the` and `The` are both normalized as `the`
-    - `end` and `end.` are both normalized as `end.`
-    - `its` and `it's` are respectively normalized as `its` and `it's`
-    - `(and` is normalized as `and`
-    - `'and'` is normalized as `and'`
-
-
-### GitHub actions
-- "Go PR Check": runs on commit (goimports, go vet, go test)
-- "Push Docker image to GHCR": builds the image and pushes it to GHCR
-
-## Possible extensions
-- Set the config with environment variables to support parameters in the Docker image
-- The normalization algorithm is not perfect (single quoted words are not handled properly) and was built to support English, it should be overridable, in order to support different logics and languages
-- The app supports only Engadget essays, it was designed to be extended with an interface `Task` to support different sources and resource types
-- Need for metrics to be exposed, with custom metrics showing progression
-- Need for the app the be "interruptable" and restart from where it stopped
-
+- **Normalization algorithm** details:
+  - Words are converted to lowercase.
+  - Leading and trailing punctuation are removed, except an apostrophe `'` at the end of a word - *needs clearer definition about quotes and punctuation*.
+  - Examples:
+    - `The` and `the` → `the`
+    - `end.` and `end` → `end`
+    - `its` and `it's` → `its` and `it's`
+    - `(and` → `and`
+    - `orders` → `orders'`
+    - `'and'` -> `and'`
 
 ---
 
+### 🛠️ GitHub Actions
 
+- **Go PR Check:** Runs on every commit, includes `goimports`, `go vet`, and tests.
+- **Push Docker Image:** Builds and pushes the Docker image to GitHub Container Registry (GHCR).
 
-### Run Locally
+---
 
-```bash
-go run ./cmd/app
-```
+### Possible Future Improvements
 
-
-![Coverage](https://codecov.io/gh/alexEnsimag/firefly/branch/main/graph/badge.svg)
+- Support environment variables tobe able to set parameters in the Docker image.
+- Improve the normalization algorithm to properly handle single-quoted words and support additional languages.
+- Extend support beyond Engadget essays by implementing the `Task` interface for different data sources and resource types.
+- Expose metrics (including progress tracking) for monitoring and observability.
+- Add the ability to pause and resume work, allowing safe interruption and continuation.
