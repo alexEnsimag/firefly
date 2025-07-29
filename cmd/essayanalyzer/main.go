@@ -15,12 +15,12 @@ import (
 )
 
 const (
-	defaultURLsPath       = "./data/endg-urls-short"
+	defaultURLsPath       = "./data/endg-urls"
 	defaultWordsPath      = "./data/words.txt"
 	defaultMinWordSize    = 3
 	defaultTopWordsCount  = 10
-	defaultTaskBufferSize = 200
-	defaulWorkers         = 15
+	defaultTaskBufferSize = 300
+	defaulWorkers         = 20
 )
 
 func main() {
@@ -65,5 +65,6 @@ func main() {
 		logger.Error("Failed to marshal result to JSON", "error", err)
 		return
 	}
+
 	fmt.Println(string(jsonBytes))
 }

@@ -8,6 +8,7 @@ import (
 	"firefly/alex/internal/words"
 	"fmt"
 	"log/slog"
+	"maps"
 	"os"
 	"sort"
 	"strings"
@@ -31,7 +32,7 @@ type (
 		// - a single go routine produces tasks (loading essays) to taskChan
 		// - each worker consumes tasks from taskChan and pushes its result to resultChan
 		// - the main go routine consumes from resultChan and aggregates the results
-		taskChan   chan string // TODO: could be extended to an interface to support different types of tasks, here contains URLs
+		taskChan   chan string
 		resultChan chan map[string]uint64
 	}
 )
@@ -85,15 +86,15 @@ func (e *EssayWordCount) Run(ctx context.Context, maxTopWords, bufferSize, worke
 		close(e.resultChan)
 	}()
 
+	if ctx.Err() != nil {
+		return nil, fmt.Errorf("work interrupted: %w", ctx.Err())
+	}
+
 	counts := map[string]uint64{}
 
 	for result := range e.resultChan {
 		counts = mergeCounts(counts, result)
 		e.logger.Debug("result processed")
-	}
-
-	if ctx.Err() != nil {
-		return nil, fmt.Errorf("work interrupted: %w", ctx.Err())
 	}
 
 	e.logger.Debug("all results processed")
@@ -188,12 +189,9 @@ func normalizeWord(word string) string {
 }
 
 func mergeCounts(m1, m2 map[string]uint64) map[string]uint64 {
-	result := make(map[string]uint64)
+	result := make(map[string]uint64, len(m1))
 
-	for k, v := range m1 {
-		result[k] = v
-	}
-
+	maps.Copy(result, m1)
 	for k, v := range m2 {
 		result[k] += v
 	}
