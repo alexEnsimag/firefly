@@ -55,7 +55,7 @@ You can configure the following parameters (defaults shown, configurable only th
 
 - Essays that can't be parsed are ignored, and the app continues to the next one.
 
-- Word counts are stored  in `uint64`, but overflow are not handled.
+- Word counts are stored  in `uint64`, but overflows are not handled.
 
 - The application uses a custom HTTP client that handles retries and rate limit
     - rate limit is set too `100` requests per second, no burst allowed
@@ -75,7 +75,7 @@ You can configure the following parameters (defaults shown, configurable only th
 
 ---
 
-### GitHub Actions
+### GitHub actions
 
 - **Go PR Check:** Runs on every commit, includes `goimports`, `go vet`, and tests.
 - **Push Docker Image:** Builds and pushes the Docker image to GitHub Container Registry (GHCR).
@@ -84,7 +84,7 @@ You can configure the following parameters (defaults shown, configurable only th
 
 ### Future improvements
 - Support environment variables tobe able to set parameters in the Docker image.
-- Improve the normalization algorithm to properly handle single-quoted words and support additional languages.
+- Improve the normalization algorithm to properly handle punctuation and support additional languages.
 - Extend support beyond Engadget essays by implementing the `Task` interface for different data sources and resource types.
 - Expose metrics (including progress tracking) for monitoring and observability.
 - Add the ability to pause and resume work, allowing safe interruption and continuation.
