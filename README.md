@@ -34,18 +34,24 @@ Run:
 docker run ghcr.io/alexensimag/firefly:latest
 ```
 
-### Configurations
+---
 
-You can configure the following parameters (defaults shown):
+### Parameters
+
+You can configure the following parameters (defaults shown, configurable only through the CLI):
 
 - minimum word size: `3`
 - number of top words returned: `10`
 - number of workers: `20`
 - task buffer size: `200`
 
+---
+
 ### Considerations
 
 - The application is cancellable with `Ctrl+C`. Note that ongoing work will be lost on interruption.
+
+- Essays that can't be parsed are ignored, and the app continues to the next one.
 
 - The application uses a custom HTTP client that handles retries and rate limit
     - rate limit is set too `100` requests per second, no burst allowed
@@ -65,7 +71,7 @@ You can configure the following parameters (defaults shown):
 
 ---
 
-### 🛠️ GitHub Actions
+### GitHub Actions
 
 - **Go PR Check:** Runs on every commit, includes `goimports`, `go vet`, and tests.
 - **Push Docker Image:** Builds and pushes the Docker image to GitHub Container Registry (GHCR).
