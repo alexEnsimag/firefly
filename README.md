@@ -2,7 +2,7 @@
 
 ## EssayAnalyzer
 
-A simple and efficient tool to cound predefined words in essays with configurable parameters and Docker support. Top 10 words are shown in `data/results.json`.
+A tool to count predefined words in essays. Top 10 words are shown in `data/results.json`.
 
 ### 🚀 How to run
 
