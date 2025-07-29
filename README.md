@@ -2,11 +2,11 @@
 
 ## EssayAnalyzer
 
-A simple and efficient tool to cound predefined words in essays with configurable parameters and Docker support.
+A simple and efficient tool to cound predefined words in essays with configurable parameters and Docker support. Top 10 words are shown in `data/results.json`.
 
 ### 🚀 How to run
 
-#### Compile and Run Locally (CLI Mode)
+#### Compile and run locally (CLI mode)
 
 Requirements: Go 1.24 or higher
 
@@ -51,14 +51,18 @@ You can configure the following parameters (defaults shown, configurable only th
 
 - The application is cancellable with `Ctrl+C`. Note that ongoing work will be lost on interruption.
 
+- Essays from Engadget are split into three sections: title, description, and content (all evaluated), the rest of the pages is ignored.
+
 - Essays that can't be parsed are ignored, and the app continues to the next one.
+
+- Word counts are stored  in `uint64`, but overflow are not handled.
 
 - The application uses a custom HTTP client that handles retries and rate limit
     - rate limit is set too `100` requests per second, no burst allowed
     - automatically retries on network errors and HTTP 429 and 5XX 
     - max 5 retries, with exponentiall backoff between 1-5 seconds
 
-- **Normalization algorithm** details:
+- Normalization algorithm details:
   - Words are converted to lowercase.
   - Leading and trailing punctuation are removed, except an apostrophe `'` at the end of a word - *needs clearer definition about quotes and punctuation*.
   - Examples:
@@ -78,8 +82,7 @@ You can configure the following parameters (defaults shown, configurable only th
 
 ---
 
-### Possible Future Improvements
-
+### Future improvements
 - Support environment variables tobe able to set parameters in the Docker image.
 - Improve the normalization algorithm to properly handle single-quoted words and support additional languages.
 - Extend support beyond Engadget essays by implementing the `Task` interface for different data sources and resource types.
