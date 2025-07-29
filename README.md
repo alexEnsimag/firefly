@@ -25,7 +25,7 @@ Requirements: Go 1.24 or higher
    ./essayanalyzer -h # for help prompt
    ```
 
-#### Run Using Docker (Default Parameters)
+#### Run Using Docker (uses default parameters)
 
 Requirements: Docker installed and running
 
