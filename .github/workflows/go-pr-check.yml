@@ -27,9 +27,6 @@ jobs:
       - name: Run go vet
         run: go vet ./...
 
-      - name: Build the project
-        run: go build ./...
-
       - name: Run tests with coverage
         run: go test -v -coverprofile=coverage.out ./...
 

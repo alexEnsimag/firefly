@@ -19,7 +19,7 @@ const (
 	defaultWordsPath      = "./data/words.txt"
 	defaultMinWordSize    = 3
 	defaultTopWordsCount  = 10
-	defaultTaskBufferSize = 300
+	defaultTaskBufferSize = 200
 	defaulWorkers         = 20
 )
 

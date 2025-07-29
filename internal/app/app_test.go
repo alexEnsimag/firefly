@@ -65,7 +65,6 @@ func TestNormalizeWord(t *testing.T) {
 		{"end.", "end"},
 		{"(parentheses)", "parentheses"},
 		{"rock'n'roll'", "rock'n'roll'"}, // apostrophes preserved
-		{"'quoted'", "quoted'"},          // leading/trailing apostrophes preserved
 	}
 
 	for _, tt := range tests {

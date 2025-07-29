@@ -86,15 +86,15 @@ func (e *EssayWordCount) Run(ctx context.Context, maxTopWords, bufferSize, worke
 		close(e.resultChan)
 	}()
 
-	if ctx.Err() != nil {
-		return nil, fmt.Errorf("work interrupted: %w", ctx.Err())
-	}
-
 	counts := map[string]uint64{}
 
 	for result := range e.resultChan {
 		counts = mergeCounts(counts, result)
 		e.logger.Debug("result processed")
+	}
+
+	if ctx.Err() != nil {
+		return nil, fmt.Errorf("work interrupted: %w", ctx.Err())
 	}
 
 	e.logger.Debug("all results processed")
@@ -178,6 +178,10 @@ func normalizeWord(word string) string {
 	first := word[0]
 	if unicode.IsPunct(rune(first)) {
 		word = word[1:]
+	}
+
+	if len(word) == 0 {
+		return ""
 	}
 
 	last := word[len(word)-1]
